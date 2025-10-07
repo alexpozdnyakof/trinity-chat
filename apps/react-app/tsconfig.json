@@ -1,13 +1,17 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
     "lib": ["DOM", "ES2020"],
     "jsx": "react-jsx",
     "target": "ES2020",
     "noEmit": true,
     "skipLibCheck": true,
     "useDefineForClassFields": true,
+    "isolatedModules": true,
+    "sourceMap": true,
 
-    /* modules */
     "module": "ESNext",
     "moduleDetection": "force",
     "moduleResolution": "bundler",
@@ -16,10 +20,11 @@
     "allowImportingTsExtensions": true,
     "noUncheckedSideEffectImports": true,
 
-    /* type checking */
+    "composite": true,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }
