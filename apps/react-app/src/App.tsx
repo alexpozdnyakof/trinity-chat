@@ -1,12 +1,7 @@
-import './app.css';
-
-const App = () => {
-  return (
-    <div className="content">
-      <h1>Rsbuild with React</h1>
-      <p>Start building amazing things with Rsbuild.</p>
-    </div>
-  );
-};
+import "./app.css";
+import { ChatRoom } from "./chat-room";
+function App() {
+  return <ChatRoom />;
+}
 
 export default App;

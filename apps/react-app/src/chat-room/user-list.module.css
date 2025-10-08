@@ -1,0 +1,13 @@
+.user-list {
+  list-style: none;
+  padding: 0 1em;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1em;
+  a {
+    color: inherit;
+    text-decoration: none;
+    font-weight: 600;
+  }
+}

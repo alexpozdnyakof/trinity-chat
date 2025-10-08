@@ -1,0 +1,8 @@
+.flex-vertical {
+  display: flex;
+  flex-direction: column;
+}
+.message {
+  display: flex;
+  gap: 0.3em;
+}
