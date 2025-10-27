@@ -1,8 +1,8 @@
 import styles from "./messages-list.module.css";
-import type { Message } from "./message";
+import type { ChatMessage } from "../store/messages.store";
 
 type Props = {
-  messages: Array<Message>;
+  messages: Array<ChatMessage>;
 };
 
 export function MessagesList({ messages }: Props) {
@@ -11,12 +11,12 @@ export function MessagesList({ messages }: Props) {
       {messages.map((message) => (
         <div className={styles.message}>
           <time>
-            <b>[{message.date}]</b>
+            <b>[19:23:31]</b>
           </time>
           <span>
-            <b>{message.author.name}:</b>
+            <b>Subzero:</b>
           </span>
-          <span>{message.text}</span>
+          <span>{message.content}</span>
         </div>
       ))}
     </div>
