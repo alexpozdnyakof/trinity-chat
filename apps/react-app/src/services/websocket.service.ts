@@ -8,7 +8,7 @@ interface Handlers {
   open: () => void;
   close: () => void;
   message: (data: string) => void;
-  error: (event: Event) => void;
+  error: (event: ErrorEvent) => void;
 }
 
 export function WebSocketService(
@@ -50,8 +50,7 @@ export function WebSocketService(
     };
 
     client.onerror = function(event) {
-      console.log("error");
-      handlers.error(event);
+      handlers.error(event as ErrorEvent);
     };
   }
 
@@ -105,7 +104,7 @@ export function WebSocketService(
   }
 
   function close() {
-    if (client) {
+    if (client && isClientOpen()) {
       client.close();
       client = null;
     } else {
