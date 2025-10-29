@@ -12,7 +12,7 @@ export function ChatRoom() {
   const { disconnect, messages, send } = useMessageStore();
 
   const addMessage = (formValue: MessageFormValue) => {
-    send({ kind: "request", content: formValue.message });
+    send({ content: formValue.message });
   };
 
   useEffect(() => {

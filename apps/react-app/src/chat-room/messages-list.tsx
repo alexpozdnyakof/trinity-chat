@@ -11,10 +11,10 @@ export function MessagesList({ messages }: Props) {
       {messages.map((message) => (
         <div className={styles.message}>
           <time>
-            <b>[19:23:31]</b>
+            <b>[{message.time}]</b>
           </time>
           <span>
-            <b>Subzero:</b>
+            <b>{message.name}:</b>
           </span>
           <span>{message.content}</span>
         </div>
