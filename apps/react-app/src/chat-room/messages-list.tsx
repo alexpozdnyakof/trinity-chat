@@ -16,7 +16,9 @@ export function MessagesList({ messages }: Props) {
           <span>
             <b>{message.name}:</b>
           </span>
-          <span>{message.content}</span>
+          <span>
+            <pre>{message.content}</pre>
+          </span>
         </div>
       ))}
     </div>

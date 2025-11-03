@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { WebSocketService } from "../services/websocket.service";
 
-interface User {
+export interface User {
   id: string;
   name: string;
 }
@@ -29,7 +29,9 @@ type IncomeMessage =
 interface Store {
   connected: boolean;
   error: string;
+
   messages: Array<ChatMessage>;
+  users: Array<User>;
   disconnect: () => void;
   send: (message: Pick<ChatMessage, "content">) => void;
 }
@@ -110,9 +112,14 @@ export const useMessageStore = create<Store>((set) => {
     }),
   );
 
-  service.eventHandler("message", (message) => {
+  service.eventHandler("message", (raw) => {
+    const message = JSON.parse(raw);
     set((state) => ({
-      messages: [...state.messages, parseMessage(JSON.parse(message))],
+      users:
+        message.type === "Hello" && message.users.length > 0
+          ? state.users.concat(message.users)
+          : state.users,
+      messages: state.messages.concat(parseMessage(message)),
     }));
   });
 
@@ -124,6 +131,7 @@ export const useMessageStore = create<Store>((set) => {
     connected: false,
     error: "",
     messages: [],
+    users: [],
     send: (message: Pick<ChatMessage, "content">) => {
       service.send(JSON.stringify(message));
     },
