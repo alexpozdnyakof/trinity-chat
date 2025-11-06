@@ -72,27 +72,53 @@ function serverMessage(content: string, utc: string): ChatMessage {
     time: date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
   };
 }
+type State = Omit<Store, "disconnect" | "send">;
 
-function parseMessage(message: IncomeMessage): ChatMessage {
+function parseMessage(state: State, message: IncomeMessage): State {
   switch (message.type) {
     case "Text":
-      return userMessage(message);
+      return {
+        ...state,
+        messages: state.messages.concat(userMessage(message)),
+      };
     case "Hello":
-      return serverMessage(message.content, message.timestamp);
+      return {
+        ...state,
+        users: state.users.concat(message.users),
+        messages: state.messages.concat(
+          serverMessage(message.content, message.timestamp),
+        ),
+      };
 
     case "Help":
-      return serverMessage(message.content, message.timestamp);
+      return {
+        ...state,
+        messages: state.messages.concat(
+          serverMessage(message.content, message.timestamp),
+        ),
+      };
     case "Joined": {
       const text = `${message.name} вошёл в комнату`;
-      return serverMessage(text, message.timestamp);
+      return {
+        ...state,
+        users: state.users.concat({ id: message.user_id, name: message.name }),
+        messages: state.messages.concat(serverMessage(text, message.timestamp)),
+      };
     }
     case "ChangedName": {
       const text = `${message.prev} теперь ${message.current}`;
-      return serverMessage(text, message.timestamp);
+      return {
+        ...state,
+        messages: state.messages.concat(serverMessage(text, message.timestamp)),
+      };
     }
     case "Left": {
       const text = `${message.name} покинул  комнату`;
-      return serverMessage(text, message.timestamp);
+      return {
+        ...state,
+        users: state.users.filter((user) => user.name != message.name),
+        messages: state.messages.concat(serverMessage(text, message.timestamp)),
+      };
     }
     default: {
       throw new Error("Unknown message type");
@@ -114,13 +140,7 @@ export const useMessageStore = create<Store>((set) => {
 
   service.eventHandler("message", (raw) => {
     const message = JSON.parse(raw);
-    set((state) => ({
-      users:
-        message.type === "Hello" && message.users.length > 0
-          ? state.users.concat(message.users)
-          : state.users,
-      messages: state.messages.concat(parseMessage(message)),
-    }));
+    set((state) => parseMessage(state, message));
   });
 
   service.eventHandler("close", () => set({ connected: false }));
