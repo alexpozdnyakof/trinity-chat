@@ -104,7 +104,7 @@ export function WebSocketService(
   }
 
   function close() {
-    if (client && isClientOpen()) {
+    if (client) {
       client.close();
       client = null;
     } else {
